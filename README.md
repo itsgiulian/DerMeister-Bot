@@ -1,0 +1,2 @@
+# DerMeister-Bot
+Discord-Bot
