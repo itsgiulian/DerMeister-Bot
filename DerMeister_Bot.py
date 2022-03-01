@@ -2,6 +2,19 @@
 
 
 
+
+bestatigung_itid = 902136682420240385
+bestatigungid = 902176553398575155
+
+
+
+bestätigungtext = "Willkommen, drück auf den Haken um dich zu verifizieren und die AGBs zu akzeptieren"
+
+bestätigungtextIT = "Willkommen, drück auf den Haken um dich als ITler zu verifizieren und die AGBs zu akzeptieren"
+
+
+
+
 class MyClient(discord.Client):
 
 
@@ -10,14 +23,37 @@ class MyClient(discord.Client):
     #Einloggen in die Konsole rückmeldung
     async def on_ready(self):
         print("Login Successfully.")
+        
+        bestatigung = client.get_channel(bestatigungid)
+        await bestatigung.send(bestätigungtext)
+
+        bestatigungit = client.get_channel(bestatigung_itid)
+        await bestatigungit.send(bestätigungtextIT)
+
+
+    async def on_reaction_add(self, reaction, user):
+        friend = discord.utils.get(user.guild.roles, name="Friend")
+        if str(reaction.emoji) == "✅":
+           await user.add_roles(friend)
+
+        IT = discord.utils.get(user.guild.roles, name="IT")
+        if str(reaction.emoji) == "☑️":
+           await user.add_roles(IT)
 
 
 
+
+
+
+          
 
     #Wenn Nachricht geschickt wird 
     async def on_message(self, message):
         if message.author == client.user:       #mcacht das der Bott nicht auf sich selber antowrtet
             return
+
+
+
 
         if message.content == "<help":
             await message.channel.send("""
@@ -57,9 +93,6 @@ class MyClient(discord.Client):
 
     async def on_message_edit(self, before, after):             #hört ob jemand was edited hat, wenn ja passiert etc
         print("Eine Nachricht wurde geaendert von " + before.content + " zu " + after.content)
-
-
-
 
 
 
